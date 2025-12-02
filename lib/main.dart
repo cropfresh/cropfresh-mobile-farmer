@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'src/constants/app_colors.dart';
 import 'src/screens/onboarding/splash_screen.dart';
+import 'src/screens/onboarding/language_selection_screen.dart';
 import 'src/screens/auth/registration_screen.dart';
+import 'src/screens/auth/profile_completion_screen.dart';
 
 void main() {
   runApp(const CropFreshFarmerApp());
@@ -32,8 +34,9 @@ class CropFreshFarmerApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashScreen(),
-        '/language-selection': (context) => const RegistrationScreen(), // Placeholder until language screen ready
+        '/language-selection': (context) => const LanguageSelectionScreen(),
         '/registration': (context) => const RegistrationScreen(),
+        '/profile-completion': (context) => const ProfileCompletionScreen(),
       },
     );
   }

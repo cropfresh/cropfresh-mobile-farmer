@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../../constants/app_colors.dart';
+import '../../widgets/step_progress_indicator.dart';
 import '../../services/voice_service.dart';
 import 'otp_verification_screen.dart';
 import '../../services/auth_repository.dart';
 
+/// Registration Screen - AC3: Step 1 of 3
+/// Phone Number Entry with Material 3 OutlinedTextField
+/// Progress indicator, +91 prefix, voice prompt, validation
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
 
@@ -14,16 +16,8 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController _phoneController = TextEditingController();
-  final VoiceService _voiceService = VoiceService();
-  String _selectedLanguage = 'English';
-
-  final List<String> _languages = [
-    'English',
-    'Kannada',
-    'Hindi',
-    'Tamil',
-    'Telugu'
-  ];
+ final VoiceService _voiceService = VoiceService();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -33,9 +27,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   Future<void> _initVoice() async {
     await _voiceService.init();
-    // Delay slightly to ensure UI is built before speaking
-    Future.delayed(const Duration(seconds: 1), () {
-      _voiceService.speak("Enter your mobile number to get started");
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _voiceService.speak("Enter your 10 digit mobile number");
     });
   }
 
@@ -46,167 +39,164 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     super.dispose();
   }
 
+  void _sendOtp() async {
+    final phoneNumber = _phoneController.text.trim();
+
+    if (phoneNumber.length != 10) {
+      _voiceService.speak("Please enter a valid 10 digit number");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter 10 digits')),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      final authRepo = AuthRepository();
+      final success = await authRepo.requestOtp(phoneNumber);
+
+      if (!mounted) return;
+
+      if (success) {
+        // Navigate to OTP screen (Step 2)
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OtpVerificationScreen(
+              phoneNumber: phoneNumber,
+            ),
+          ),
+        );
+      } else {
+        _voiceService.speak("Failed to send OTP. Please try again.");
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to send OTP. Please try again.')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.cream,
+      backgroundColor: const Color(0xFFFFF8E1), // Warm Cream
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 40),
-              // Logo Placeholder
-              Center(
-                child: Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: AppColors.green.withOpacity(0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.agriculture,
-                    size: 48,
-                    color: AppColors.green,
-                  ),
-                ),
-              ),
               const SizedBox(height: 24),
+
+              // Step Progress Indicator
+              const StepProgressIndicator(currentStep: 1),
+
+              const SizedBox(height: 40),
+
+              // Header
               Text(
-                'Start Farming',
-                style: GoogleFonts.outfit(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.green,
-                ),
+                "Let's Get Started",
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFFF57C00), // Orange
+                    ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 40),
-              
-              // Language Selector
-              Text(
-                'Select Language / ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ',
-                style: GoogleFonts.outfit(
-                  fontSize: 16,
-                  color: AppColors.black,
-                ),
-              ),
+
               const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                children: _languages.map((lang) {
-                  final isSelected = _selectedLanguage == lang;
-                  return ChoiceChip(
-                    label: Text(lang),
-                    selected: isSelected,
-                    selectedColor: AppColors.orange,
-                    labelStyle: TextStyle(
-                      color: isSelected ? AppColors.white : AppColors.black,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                    ),
-                    onSelected: (selected) {
-                      if (selected) {
-                        setState(() {
-                          _selectedLanguage = lang;
-                        });
-                        // In a real app, we would switch TTS language here
-                        _voiceService.speak("Selected $lang");
-                      }
-                    },
-                  );
-                }).toList(),
-              ),
-              
-              const SizedBox(height: 40),
-              
-              // Mobile Number Input
+
               Text(
-                'Mobile Number',
-                style: GoogleFonts.outfit(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
+                'Enter your mobile number to continue',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Colors.black87,
+                    ),
+                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
+
+              const SizedBox(height: 48),
+
+              // Mobile Number Input - Material 3 Outlined TextField
               TextField(
                 controller: _phoneController,
                 keyboardType: TextInputType.phone,
                 maxLength: 10,
-                style: GoogleFonts.outfit(fontSize: 24, letterSpacing: 2),
+                style: const TextStyle(fontSize: 20, letterSpacing: 1.5),
                 decoration: InputDecoration(
-                  prefixText: '+91 ',
-                  filled: true,
-                  fillColor: AppColors.white,
+                  labelText: 'Mobile Number',
+                  hintText: '9876543210',
+                  prefixText: '+91 🇮🇳  ',
+                  prefixStyle: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
+                    borderSide: BorderSide(
+                      color: Colors.grey[400]!,
+                      width: 2,
+                    ),
                   ),
-                  contentPadding: const EdgeInsets.all(16),
-                  counterText: "",
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                      color: Colors.grey[400]!,
+                      width: 2,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(
+                      color: Color(0xFFF57C00), // Orange
+                      width: 2,
+                    ),
+                  ),
+                  counterText: '',
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 16,
+                  ),
                 ),
               ),
-              
-              const Spacer(),
-              
-              // Send OTP Button
-              SizedBox(
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_phoneController.text.length == 10) {
-                      // Request OTP
-                      setState(() {
-                        // Show loading (simple way for now, ideally use a state variable)
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Sending OTP...')),
-                        );
-                      });
 
-                      final authRepo = AuthRepository();
-                      authRepo.requestOtp(_phoneController.text).then((success) {
-                        if (success) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => OtpVerificationScreen(
-                                phoneNumber: _phoneController.text,
-                              ),
-                            ),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('OTP Sent!')),
-                          );
-                        } else {
-                          _voiceService.speak("Failed to send OTP. Please try again.");
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Failed to send OTP')),
-                          );
-                        }
-                      });
-                    } else {
-                      _voiceService.speak("Please enter a valid 10 digit number");
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.orange,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(28),
-                    ),
-                    elevation: 2,
+              const Spacer(),
+
+              // Send OTP Button - Material 3 FilledButton
+              FilledButton(
+                onPressed: _isLoading ? null : _sendOtp,
+                style: FilledButton.styleFrom(
+                  backgroundColor: const Color(0xFFF57C00), // Orange
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Text(
-                    'Send OTP',
-                    style: GoogleFonts.outfit(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.white,
-                    ),
-                  ),
+                  minimumSize: const Size(0, 56), // 56dp height
                 ),
+                child: _isLoading
+                    ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      )
+                    : const Text(
+                        'Send OTP',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
               ),
-              const SizedBox(height: 20),
+
+              const SizedBox(height: 24),
             ],
           ),
         ),
