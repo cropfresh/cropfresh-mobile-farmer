@@ -1,0 +1,8 @@
+.git
+.env
+build/
+.dart_tool/
+.idea/
+*.iml
+test/
+node_modules
