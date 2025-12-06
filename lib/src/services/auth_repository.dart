@@ -3,11 +3,22 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthRepository {
+  // DEV MODE: Set to true to bypass backend calls for local UI testing
+  // Set to false when testing with real backend
+  static const bool devMode = true;
+  
   // In a real app, this should be in an environment config
   static const String baseUrl = 'http://10.0.2.2:3000/v1'; // 10.0.2.2 for Android Emulator
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   Future<bool> requestOtp(String phoneNumber) async {
+    // DEV MODE: Bypass backend call
+    if (devMode) {
+      print('[DEV] Mock OTP sent to $phoneNumber');
+      await Future.delayed(const Duration(milliseconds: 500)); // Simulate network
+      return true;
+    }
+    
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/auth/otp/request'),
@@ -29,6 +40,17 @@ class AuthRepository {
   }
 
   Future<bool> verifyOtp(String phoneNumber, String otp) async {
+    // DEV MODE: Accept any 6-digit OTP
+    if (devMode) {
+      print('[DEV] Mock OTP verification for $phoneNumber with code $otp');
+      if (otp.length == 6) {
+        await Future.delayed(const Duration(milliseconds: 500)); // Simulate network
+        await _storage.write(key: 'jwt_token', value: 'dev_mock_token_${DateTime.now().millisecondsSinceEpoch}');
+        return true;
+      }
+      return false;
+    }
+    
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/auth/otp/verify'),

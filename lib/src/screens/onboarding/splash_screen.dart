@@ -57,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen>
             children: [
               // Logo placeholder - user will add to assets/logo/
               Image.asset(
-                'assets/logo/cropfresh_lotus_logo.png',
+                'assets/logo/logo-full.png',
                 width: 200,
                 height: 200,
                 errorBuilder: (context, error, stackTrace) {
