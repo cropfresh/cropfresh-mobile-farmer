@@ -2,28 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../constants/app_colors.dart';
 import '../../core/animations/animation_constants.dart';
-import '../../widgets/step_progress_indicator.dart';
 import '../../services/voice_service.dart';
 import '../../services/auth_repository.dart';
-import 'otp_verification_screen.dart';
 
-/// Registration Screen - AC4 (Story 2.1)
-/// Phone Number Entry with auto-formatting and M3 styling
-/// Progress indicator, +91 prefix, voice prompt, validation
-class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({super.key});
+/// Login Screen (Story 2.2 - AC1, AC2)
+/// "Welcome Back" screen for returning farmers with phone input
+/// Matches Material 3 styling from registration_screen.dart
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<RegistrationScreen> createState() => _RegistrationScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen>
+class _LoginScreenState extends State<LoginScreen>
     with TickerProviderStateMixin {
   final TextEditingController _phoneController = TextEditingController();
   final FocusNode _phoneFocusNode = FocusNode();
   final VoiceService _voiceService = VoiceService();
   bool _isLoading = false;
   bool _isValid = false;
+  String? _errorMessage;
   
   late AnimationController _contentController;
   late Animation<double> _contentFade;
@@ -59,7 +58,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
   Future<void> _initVoice() async {
     await _voiceService.init();
     Future.delayed(const Duration(milliseconds: 800), () {
-      _voiceService.speak("Enter your 10 digit mobile number");
+      _voiceService.speak("Enter your mobile number to login");
     });
   }
 
@@ -67,6 +66,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
     final phone = _phoneController.text.replaceAll(' ', '');
     setState(() {
       _isValid = phone.length == 10 && RegExp(r'^[6-9]\d{9}$').hasMatch(phone);
+      _errorMessage = null; // Clear error on change
     });
   }
 
@@ -79,7 +79,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
     super.dispose();
   }
 
-  void _sendOtp() async {
+  void _sendLoginOtp() async {
     final phoneNumber = _phoneController.text.replaceAll(' ', '').trim();
 
     if (!_isValid) {
@@ -88,40 +88,83 @@ class _RegistrationScreenState extends State<RegistrationScreen>
     }
 
     HapticFeedback.mediumImpact();
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
 
     try {
       final authRepo = AuthRepository();
-      final success = await authRepo.requestOtp(phoneNumber);
+      final result = await authRepo.requestLoginOtp(phoneNumber);
 
       if (!mounted) return;
 
-      if (success) {
-        // Navigate to OTP screen
-        Navigator.push(
+      if (result['success'] == true) {
+        // Navigate to OTP screen in login mode
+        Navigator.pushNamed(
           context,
-          MaterialPageRoute(
-            builder: (context) => OtpVerificationScreen(
-              phoneNumber: phoneNumber,
-            ),
-          ),
+          '/otp-verification',
+          arguments: {
+            'phoneNumber': phoneNumber,
+            'isLoginFlow': true,
+          },
         );
       } else {
-        _voiceService.speak("Failed to send OTP. Please try again.");
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Failed to send OTP. Please try again.'),
-            backgroundColor: AppColors.error,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        );
+        // Handle errors
+        final errorCode = result['errorCode'];
+        if (errorCode == 'PHONE_NOT_REGISTERED') {
+          setState(() {
+            _errorMessage = 'Number not found. Register now?';
+          });
+          _voiceService.speak("Number not registered. Please register first.");
+        } else if (errorCode == 'ACCOUNT_LOCKED') {
+          final lockedUntil = result['lockedUntil'];
+          setState(() {
+            _errorMessage = 'Account locked. Try again later.';
+          });
+          _voiceService.speak("Account temporarily locked.");
+          _showLockedDialog(lockedUntil);
+        } else {
+          setState(() {
+            _errorMessage = 'Failed to send code. Try again.';
+          });
+          _voiceService.speak("Failed to send code. Please try again.");
+        }
       }
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
       }
     }
+  }
+
+  void _showLockedDialog(String? lockedUntil) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        icon: Icon(Icons.lock_clock_rounded, size: 48, color: AppColors.error),
+        title: const Text('Account Temporarily Locked'),
+        content: Text(
+          'Too many failed attempts. Please wait 30 minutes before trying again.',
+          style: TextStyle(color: AppColors.onSurfaceVariant),
+          textAlign: TextAlign.center,
+        ),
+        actions: [
+          FilledButton(
+            onPressed: () => Navigator.pop(context),
+            style: FilledButton.styleFrom(backgroundColor: AppColors.primary),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _navigateToRegister() {
+    HapticFeedback.lightImpact();
+    // Navigate to registration flow via Welcome screen
+    Navigator.pushReplacementNamed(context, '/welcome');
   }
 
   @override
@@ -135,6 +178,14 @@ class _RegistrationScreenState extends State<RegistrationScreen>
           icon: const Icon(Icons.arrow_back_rounded, color: AppColors.onSurface),
           onPressed: () => Navigator.pop(context),
         ),
+        actions: [
+          // Language selector
+          IconButton(
+            icon: const Icon(Icons.language_rounded, color: AppColors.onSurfaceVariant),
+            onPressed: () => Navigator.pushNamed(context, '/language-selection'),
+            tooltip: 'Change Language',
+          ),
+        ],
       ),
       body: SafeArea(
         child: SlideTransition(
@@ -146,10 +197,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Step Progress Indicator
-                  const StepProgressIndicator(currentStep: 1),
-                  
-                  const SizedBox(height: 48),
+                  const SizedBox(height: 24),
 
                   // Header
                   _buildHeader(),
@@ -161,13 +209,18 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                   
                   const SizedBox(height: 12),
                   
-                  // Helper text
+                  // Error / Helper text
                   _buildHelperText(),
 
                   const Spacer(),
 
-                  // Send OTP Button
-                  _buildSendOtpButton(),
+                  // Send Code Button
+                  _buildSendCodeButton(),
+                  
+                  const SizedBox(height: 20),
+                  
+                  // Register link
+                  _buildRegisterLink(),
 
                   const SizedBox(height: 32),
                 ],
@@ -182,30 +235,23 @@ class _RegistrationScreenState extends State<RegistrationScreen>
   Widget _buildHeader() {
     return Column(
       children: [
-        // Phone icon
+        // Welcome back icon
         Container(
           width: 80,
           height: 80,
           decoration: BoxDecoration(
-            gradient: AppColors.primaryGradient,
+            color: AppColors.secondaryContainer,
             borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.primary.withOpacity(0.3),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
-              ),
-            ],
           ),
           child: const Icon(
-            Icons.phone_android_rounded,
+            Icons.waving_hand_rounded,
             size: 40,
-            color: Colors.white,
+            color: AppColors.secondary,
           ),
         ),
         const SizedBox(height: 24),
         Text(
-          "Let's Get Started",
+          'Welcome Back!',
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
@@ -214,7 +260,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
         ),
         const SizedBox(height: 8),
         Text(
-          'Enter your mobile number to continue',
+          'Enter your mobile number to login',
           style: TextStyle(
             fontSize: 16,
             color: AppColors.onSurfaceVariant,
@@ -230,15 +276,17 @@ class _RegistrationScreenState extends State<RegistrationScreen>
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: _phoneFocusNode.hasFocus
-              ? AppColors.primary
-              : AppColors.outlineVariant,
-          width: _phoneFocusNode.hasFocus ? 2 : 1,
+          color: _errorMessage != null 
+              ? AppColors.error
+              : _phoneFocusNode.hasFocus
+                  ? AppColors.secondary  // Orange for login
+                  : AppColors.outlineVariant,
+          width: _phoneFocusNode.hasFocus || _errorMessage != null ? 2 : 1,
         ),
         boxShadow: _phoneFocusNode.hasFocus
             ? [
                 BoxShadow(
-                  color: AppColors.primary.withOpacity(0.1),
+                  color: AppColors.secondary.withOpacity(0.1),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -329,11 +377,40 @@ class _RegistrationScreenState extends State<RegistrationScreen>
   }
 
   Widget _buildHelperText() {
+    // Error message takes priority
+    if (_errorMessage != null) {
+      return Column(
+        children: [
+          Text(
+            _errorMessage!,
+            style: TextStyle(
+              fontSize: 14,
+              color: AppColors.error,
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          if (_errorMessage!.contains('Register'))
+            TextButton(
+              onPressed: _navigateToRegister,
+              child: Text(
+                'Register Now →',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primary,
+                ),
+              ),
+            ),
+        ],
+      );
+    }
+    
     final phone = _phoneController.text.replaceAll(' ', '');
     
     if (phone.isEmpty) {
       return Text(
-        'We will send you a 6-digit OTP',
+        'We will send you a login code via SMS',
         style: TextStyle(
           fontSize: 14,
           color: AppColors.onSurfaceVariant,
@@ -366,7 +443,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
         Icon(Icons.check_circle_rounded, color: AppColors.secondary, size: 18),
         const SizedBox(width: 6),
         Text(
-          'Ready to send OTP',
+          'Ready to login',
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
@@ -377,22 +454,22 @@ class _RegistrationScreenState extends State<RegistrationScreen>
     );
   }
 
-  Widget _buildSendOtpButton() {
+  Widget _buildSendCodeButton() {
     return AnimatedContainer(
       duration: AnimationConstants.durationShort,
       height: 56,
       child: FilledButton(
-        onPressed: _isValid && !_isLoading ? _sendOtp : null,
+        onPressed: _isValid && !_isLoading ? _sendLoginOtp : null,
         style: FilledButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.onPrimary,
+          backgroundColor: AppColors.secondary, // Orange for login
+          foregroundColor: AppColors.onSecondary,
           disabledBackgroundColor: AppColors.outlineVariant,
           disabledForegroundColor: AppColors.onSurfaceVariant,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
           elevation: _isValid ? 2 : 0,
-          shadowColor: AppColors.primary.withOpacity(0.3),
+          shadowColor: AppColors.secondary.withOpacity(0.3),
         ),
         child: _isLoading
             ? const SizedBox(
@@ -407,7 +484,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Get OTP',
+                    'Send Login Code',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -418,6 +495,37 @@ class _RegistrationScreenState extends State<RegistrationScreen>
                 ],
               ),
       ),
+    );
+  }
+
+  Widget _buildRegisterLink() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "Don't have an account? ",
+          style: TextStyle(
+            fontSize: 15,
+            color: AppColors.onSurfaceVariant,
+          ),
+        ),
+        TextButton(
+          onPressed: _navigateToRegister,
+          style: TextButton.styleFrom(
+            padding: EdgeInsets.zero,
+            minimumSize: Size.zero,
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+          child: Text(
+            'Register',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: AppColors.primary,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
