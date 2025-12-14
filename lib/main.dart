@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'src/constants/app_colors.dart';
+import 'src/providers/listings_provider.dart';
 
 // Onboarding Screens
 import 'src/screens/onboarding/splash_screen.dart';
@@ -19,8 +21,24 @@ import 'src/screens/auth/otp_verification_screen.dart';
 import 'src/screens/auth/profile_completion_screen.dart';
 import 'src/screens/auth/login_screen.dart';
 
+// Dashboard Screens
+import 'src/screens/dashboard/dashboard_shell.dart';
+
+// Listing Screens (Story 3.1)
+import 'src/screens/listing/voice_listing_screen.dart';
+import 'src/screens/listing/listing_confirmation_screen.dart';
+import 'src/screens/listing/crop_selection_grid.dart';
+import 'src/screens/listing/photo_capture_screen.dart';
+import 'src/screens/listing/manual_listing_screen.dart';
+import 'src/screens/listing/listing_review_screen.dart';
+
 void main() {
-  runApp(const CropFreshFarmerApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ListingsProvider(),
+      child: const CropFreshFarmerApp(),
+    ),
+  );
 }
 
 class CropFreshFarmerApp extends StatelessWidget {
@@ -135,36 +153,29 @@ class CropFreshFarmerApp extends StatelessWidget {
       case '/login':
         return MaterialPageRoute(builder: (_) => const LoginScreen());
       
-      // Home/Dashboard (placeholder until implemented)
+      // Home/Dashboard - Farmer Dashboard with bottom navigation
       case '/home':
-        // TODO: Implement proper HomeScreen in Dashboard story
-        return MaterialPageRoute(
-          builder: (_) => Scaffold(
-            appBar: AppBar(title: const Text('CropFresh Home')),
-            body: const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.check_circle, size: 80, color: Colors.green),
-                  SizedBox(height: 16),
-                  Text('Login Successful!', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 8),
-                  Text('Welcome to CropFresh Farmer Dashboard'),
-                ],
-              ),
-            ),
-          ),
-        );
+        return MaterialPageRoute(builder: (_) => const DashboardShell());
+      
+      // Story 3.1 - Voice Listing Flow
+      case '/voice-listing':
+        return MaterialPageRoute(builder: (_) => const VoiceListingScreen());
+      case '/listing-confirmation':
+        return MaterialPageRoute(builder: (_) => const ListingConfirmationScreen());
+      case '/crop-selection':
+        return MaterialPageRoute(builder: (_) => const CropSelectionGrid());
+      case '/photo-capture':
+        return MaterialPageRoute(builder: (_) => const PhotoCaptureScreen());
+      
+      // Manual Listing Flow
+      case '/manual-listing':
+        return MaterialPageRoute(builder: (_) => const ManualListingScreen());
+      case '/listing-review':
+        return MaterialPageRoute(builder: (_) => const ListingReviewScreen());
       
       // Legacy routes (for backward compatibility)
       case '/profile-completion':
         return MaterialPageRoute(builder: (_) => const ProfileCompletionScreen());
-      
-      // TODO: Add home and listing screens
-      // case '/home':
-      //   return MaterialPageRoute(builder: (_) => const HomeScreen());
-      // case '/create-listing':
-      //   return MaterialPageRoute(builder: (_) => const CreateListingScreen());
       
       default:
         return MaterialPageRoute(
