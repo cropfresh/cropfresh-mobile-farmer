@@ -33,6 +33,13 @@ import 'src/screens/listing/photo_review_screen.dart';
 import 'src/screens/listing/manual_listing_screen.dart';
 import 'src/screens/listing/listing_review_screen.dart';
 import 'src/screens/listing/grading_results_screen.dart';
+import 'src/screens/listing/drop_point_assignment_screen.dart';
+
+// Match Screens (Story 3.5)
+import 'src/screens/match/match_details_screen.dart';
+import 'src/screens/match/match_success_screen.dart';
+import 'src/widgets/pending_matches_widget.dart';
+import 'src/models/match_models.dart';
 
 // Services (Story 3.2)
 import 'src/services/photo_upload_service.dart';
@@ -207,6 +214,61 @@ class CropFreshFarmerApp extends StatelessWidget {
         return MaterialPageRoute(
           settings: settings,
           builder: (_) => const GradingResultsScreen(),
+        );
+      
+      // Story 3.4 - Drop Point Assignment
+      case '/drop-point':
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const DropPointAssignmentScreen(),
+        );
+      
+      // Story 3.5 - Match Screens (Buyer Match View & Acceptance)
+      case '/matches':
+        // Get matches from arguments or use mock data for demo
+        final matches = settings.arguments as List<Match>? ?? 
+            [Match.mock(), Match.mock(isPartial: true)];
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => MatchesScreen(
+            matches: matches,
+            onMatchTap: (match) {
+              Navigator.of(context).pushNamed('/match-details', arguments: match);
+            },
+          ),
+        );
+      case '/match-details':
+        final match = settings.arguments as Match? ?? Match.mock();
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => MatchDetailsScreen(
+            match: match,
+            onAccept: (acceptPartial) async {
+              // Navigate to success screen
+              Navigator.of(context).pushReplacementNamed(
+                '/match-success',
+                arguments: match,
+              );
+            },
+            onReject: (reason, otherText) async {
+              // Show snackbar and go back
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Match rejected. Finding new buyers...')),
+              );
+              Navigator.of(context).pop();
+            },
+          ),
+        );
+      case '/match-success':
+        final match = settings.arguments as Match? ?? Match.mock();
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => MatchSuccessScreen(
+            match: match,
+            successMessage: 'Deliver to drop point by 9 AM tomorrow.',
+            onViewOrder: () => Navigator.of(context).pushReplacementNamed('/home'),
+            onBackToDashboard: () => Navigator.of(context).pushReplacementNamed('/home'),
+          ),
         );
       
       // Legacy routes (for backward compatibility)

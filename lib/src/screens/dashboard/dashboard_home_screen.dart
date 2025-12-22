@@ -260,10 +260,13 @@ class _QuickActionsSection extends StatelessWidget {
           children: [
             Expanded(
               child: _ActionCard(
-                icon: Icons.receipt_long,
-                label: 'My Orders',
-                subtitle: 'Track sales',
-                onTap: () {},
+                icon: Icons.handshake,
+                label: 'Matches',
+                subtitle: 'View buyers',
+                onTap: () {
+                  // Navigate to matches screen (Story 3.5 Demo)
+                  Navigator.pushNamed(context, '/matches');
+                },
               ),
             ),
             const SizedBox(width: AppSpacing.md),
