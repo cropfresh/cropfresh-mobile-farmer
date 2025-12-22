@@ -281,11 +281,10 @@ class _PhotoReviewScreenState extends State<PhotoReviewScreen>
   }
 
   void _navigateToNextScreen() {
-    // Navigate to AI grading screen (Story 3.3) or back to listing
-    Navigator.pushNamedAndRemoveUntil(
+    // Navigate to AI grading screen (Story 3.3)
+    Navigator.pushReplacementNamed(
       context,
-      '/listing-review',
-      (route) => route.settings.name == '/home',
+      '/grading-results',
       arguments: {
         'cropType': _cropType,
         'cropEmoji': _cropEmoji,
@@ -293,7 +292,7 @@ class _PhotoReviewScreenState extends State<PhotoReviewScreen>
         'entryMode': _entryMode,
         'photoPath': _compressedFile?.path ?? _photoPath,
         'listingId': _listingId,
-        'uploadComplete': true,
+        'language': _language,
       },
     );
   }

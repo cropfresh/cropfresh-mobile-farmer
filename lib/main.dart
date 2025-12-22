@@ -32,6 +32,7 @@ import 'src/screens/listing/photo_capture_screen.dart';
 import 'src/screens/listing/photo_review_screen.dart';
 import 'src/screens/listing/manual_listing_screen.dart';
 import 'src/screens/listing/listing_review_screen.dart';
+import 'src/screens/listing/grading_results_screen.dart';
 
 // Services (Story 3.2)
 import 'src/services/photo_upload_service.dart';
@@ -196,7 +197,17 @@ class CropFreshFarmerApp extends StatelessWidget {
       case '/manual-listing':
         return MaterialPageRoute(builder: (_) => const ManualListingScreen());
       case '/listing-review':
-        return MaterialPageRoute(builder: (_) => const ListingReviewScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const ListingReviewScreen(),
+        );
+      
+      // Story 3.3 - AI Quality Grading & Price Estimation
+      case '/grading-results':
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const GradingResultsScreen(),
+        );
       
       // Legacy routes (for backward compatibility)
       case '/profile-completion':
