@@ -286,7 +286,7 @@ class _LoginScreenState extends State<LoginScreen>
         boxShadow: _phoneFocusNode.hasFocus
             ? [
                 BoxShadow(
-                  color: AppColors.secondary.withOpacity(0.1),
+                  color: AppColors.secondary.withValues(alpha: 0.1),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -469,7 +469,7 @@ class _LoginScreenState extends State<LoginScreen>
             borderRadius: BorderRadius.circular(16),
           ),
           elevation: _isValid ? 2 : 0,
-          shadowColor: AppColors.secondary.withOpacity(0.3),
+          shadowColor: AppColors.secondary.withValues(alpha: 0.3),
         ),
         child: _isLoading
             ? const SizedBox(

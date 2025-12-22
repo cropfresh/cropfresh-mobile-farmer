@@ -1,11 +1,11 @@
-/// Produce Data Model - Complete catalog of Indian agricultural products
-/// 
-/// Based on Indian market research:
-/// - Vegetables: sold by kg, quintal
-/// - Fruits: sold by kg, dozen (bananas), per piece (coconut, watermelon)
-/// - Leafy greens: sold by bunch, kg
-/// - Grains: sold by kg, quintal, bag (50kg)
-/// - Flowers: sold by bunch, kg
+// Produce Data Model - Complete catalog of Indian agricultural products
+//
+// Based on Indian market research:
+// - Vegetables: sold by kg, quintal
+// - Fruits: sold by kg, dozen (bananas), per piece (coconut, watermelon)
+// - Leafy greens: sold by bunch, kg
+// - Grains: sold by kg, quintal, bag (50kg)
+// - Flowers: sold by bunch, kg
 
 /// Produce category types
 enum ProduceCategory {

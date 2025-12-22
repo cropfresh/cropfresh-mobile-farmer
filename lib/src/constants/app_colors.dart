@@ -79,4 +79,79 @@ class AppColors {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
+
+  // ============================================
+  // DARK THEME COLORS (WCAG Accessible)
+  // ============================================
+  static const Color darkSurface = Color(0xFF121212);
+  static const Color darkSurfaceContainer = Color(0xFF1E1E1E);
+  static const Color darkSurfaceContainerHigh = Color(0xFF2A2A2A);
+  static const Color darkOnSurface = Color(0xFFE6E1E5);
+  static const Color darkOnSurfaceVariant = Color(0xFFCAC4D0);
+  static const Color darkOutline = Color(0xFF938F99);
+  static const Color darkOutlineVariant = Color(0xFF49454F);
+  
+  // Dark theme primary (lighter for dark background)
+  static const Color darkPrimary = Color(0xFFFFB74D);
+  static const Color darkOnPrimary = Color(0xFF4E2600);
+  static const Color darkPrimaryContainer = Color(0xFF7A4400);
+  static const Color darkOnPrimaryContainer = Color(0xFFFFDDB3);
+  
+  // Dark theme secondary
+  static const Color darkSecondary = Color(0xFF81C784);
+  static const Color darkOnSecondary = Color(0xFF003910);
+  static const Color darkSecondaryContainer = Color(0xFF005319);
+  static const Color darkOnSecondaryContainer = Color(0xFFA5F3A6);
+  
+  // Dark theme error
+  static const Color darkError = Color(0xFFF2B8B5);
+  static const Color darkOnError = Color(0xFF601410);
+  static const Color darkErrorContainer = Color(0xFF8C1D18);
+  static const Color darkOnErrorContainer = Color(0xFFF9DEDC);
+
+  // ============================================
+  // COLOR SCHEME GENERATORS
+  // ============================================
+  
+  /// Generate light theme ColorScheme
+  static ColorScheme get lightColorScheme => const ColorScheme.light(
+    primary: primary,
+    onPrimary: onPrimary,
+    primaryContainer: primaryContainer,
+    onPrimaryContainer: onPrimaryContainer,
+    secondary: secondary,
+    onSecondary: onSecondary,
+    secondaryContainer: secondaryContainer,
+    onSecondaryContainer: onSecondaryContainer,
+    surface: surface,
+    onSurface: onSurface,
+    surfaceContainerHighest: surfaceContainerHigh,
+    error: error,
+    errorContainer: errorContainer,
+    onError: onError,
+    onErrorContainer: onErrorContainer,
+    outline: outline,
+    outlineVariant: outlineVariant,
+  );
+  
+  /// Generate dark theme ColorScheme
+  static ColorScheme get darkColorScheme => const ColorScheme.dark(
+    primary: darkPrimary,
+    onPrimary: darkOnPrimary,
+    primaryContainer: darkPrimaryContainer,
+    onPrimaryContainer: darkOnPrimaryContainer,
+    secondary: darkSecondary,
+    onSecondary: darkOnSecondary,
+    secondaryContainer: darkSecondaryContainer,
+    onSecondaryContainer: darkOnSecondaryContainer,
+    surface: darkSurface,
+    onSurface: darkOnSurface,
+    surfaceContainerHighest: darkSurfaceContainerHigh,
+    error: darkError,
+    errorContainer: darkErrorContainer,
+    onError: darkOnError,
+    onErrorContainer: darkOnErrorContainer,
+    outline: darkOutline,
+    outlineVariant: darkOutlineVariant,
+  );
 }

@@ -5,10 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:cropfresh_mobile_farmer/src/screens/dashboard/dashboard_shell.dart';
-import 'package:cropfresh_mobile_farmer/src/screens/dashboard/dashboard_home_screen.dart';
-import 'package:cropfresh_mobile_farmer/src/screens/dashboard/listings_screen.dart';
-import 'package:cropfresh_mobile_farmer/src/screens/dashboard/markets_screen.dart';
-import 'package:cropfresh_mobile_farmer/src/screens/dashboard/profile_screen.dart';
 
 void main() {
   testWidgets('DashboardShell should render NavigationBar with 4 destinations',

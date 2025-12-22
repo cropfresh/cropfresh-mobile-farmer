@@ -226,7 +226,7 @@ void _submitProfile() async {
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? const Color(0xFFF57C00).withOpacity(0.1)
+                              ? const Color(0xFFF57C00).withValues(alpha: 0.1)
                               : Colors.white,
                           border: Border.all(
                             color: isSelected
@@ -312,7 +312,7 @@ void _submitProfile() async {
                           }
                         });
                       },
-                      selectedColor: const Color(0xFFF57C00).withOpacity(0.3),
+                      selectedColor: const Color(0xFFF57C00).withValues(alpha: 0.3),
                       checkmarkColor: const Color(0xFFF57C00),
                       labelStyle: TextStyle(
                         color: isSelected ? const Color(0xFFF57C00) : Colors.black87,

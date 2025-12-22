@@ -61,21 +61,6 @@ class _DashboardShellState extends State<DashboardShell>
     super.dispose();
   }
 
-  void _onDestinationSelected(int index) {
-    // index 2 is the placeholder for the center FAB notch
-    if (index == 2) return;
-    
-    setState(() {
-      // Adjust index for items after the center FAB
-      _selectedIndex = index > 2 ? index - 1 : index;
-    });
-  }
-
-  int _getNavIndex() {
-    // Map screen index to nav bar index (accounting for center placeholder)
-    return _selectedIndex >= 2 ? _selectedIndex + 1 : _selectedIndex;
-  }
-
   void _showListingModeSelector() {
     HapticFeedback.mediumImpact();
     

@@ -1,6 +1,6 @@
-/// Karnataka Location Data
-/// Complete list of all 31 districts and their talukas
-/// For Story 2.1 - AC5: Profile Setup Screen
+// Karnataka Location Data
+// Complete list of all 31 districts and their talukas
+// For Story 2.1 - AC5: Profile Setup Screen
 
 class KarnatakaLocations {
   /// All 31 districts of Karnataka

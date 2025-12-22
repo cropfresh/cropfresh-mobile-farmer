@@ -29,13 +29,25 @@ import 'src/screens/listing/voice_listing_screen.dart';
 import 'src/screens/listing/listing_confirmation_screen.dart';
 import 'src/screens/listing/crop_selection_grid.dart';
 import 'src/screens/listing/photo_capture_screen.dart';
+import 'src/screens/listing/photo_review_screen.dart';
 import 'src/screens/listing/manual_listing_screen.dart';
 import 'src/screens/listing/listing_review_screen.dart';
 
-void main() {
+// Services (Story 3.2)
+import 'src/services/photo_upload_service.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize photo upload service for offline queue (Story 3.2)
+  await photoUploadService.initialize();
+  
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ListingsProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ListingsProvider()),
+        ChangeNotifierProvider.value(value: photoUploadService),
+      ],
       child: const CropFreshFarmerApp(),
     ),
   );
@@ -163,9 +175,22 @@ class CropFreshFarmerApp extends StatelessWidget {
       case '/listing-confirmation':
         return MaterialPageRoute(builder: (_) => const ListingConfirmationScreen());
       case '/crop-selection':
-        return MaterialPageRoute(builder: (_) => const CropSelectionGrid());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const CropSelectionGrid(),
+        );
       case '/photo-capture':
-        return MaterialPageRoute(builder: (_) => const PhotoCaptureScreen());
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const PhotoCaptureScreen(),
+        );
+      
+      // Story 3.2 - Photo Review and Upload
+      case '/photo-review':
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const PhotoReviewScreen(),
+        );
       
       // Manual Listing Flow
       case '/manual-listing':

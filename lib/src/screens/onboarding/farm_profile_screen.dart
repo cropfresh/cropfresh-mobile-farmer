@@ -216,7 +216,7 @@ class _FarmProfileScreenState extends State<FarmProfileScreen> {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary.withOpacity(0.1) : Colors.white,
+          color: isSelected ? AppColors.primary.withValues(alpha: 0.1) : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected ? AppColors.primary : Colors.grey.shade300,
@@ -273,7 +273,7 @@ class _FarmProfileScreenState extends State<FarmProfileScreen> {
           }
         });
       },
-      selectedColor: AppColors.primary.withOpacity(0.2),
+      selectedColor: AppColors.primary.withValues(alpha: 0.2),
       checkmarkColor: AppColors.primary,
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
@@ -304,7 +304,7 @@ class _FarmProfileScreenState extends State<FarmProfileScreen> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.secondary.withOpacity(0.15) : Colors.white,
+          color: isSelected ? AppColors.secondary.withValues(alpha: 0.15) : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected ? AppColors.secondary : Colors.grey.shade300,

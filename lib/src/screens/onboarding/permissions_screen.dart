@@ -269,22 +269,22 @@ class _PermissionsScreenState extends State<PermissionsScreen>
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isGranted 
-            ? AppColors.secondaryContainer.withOpacity(0.5)
+            ? AppColors.secondaryContainer.withValues(alpha: 0.5)
             : isSkipped 
-                ? AppColors.surfaceContainerHigh.withOpacity(0.5)
+                ? AppColors.surfaceContainerHigh.withValues(alpha: 0.5)
                 : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isGranted 
               ? AppColors.secondary 
               : isSkipped
-                  ? AppColors.outline.withOpacity(0.5)
+                  ? AppColors.outline.withValues(alpha: 0.5)
                   : AppColors.outlineVariant,
           width: isGranted ? 1.5 : 1,
         ),
         boxShadow: isHandled ? null : [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -301,13 +301,13 @@ class _PermissionsScreenState extends State<PermissionsScreen>
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: isGranted
-                      ? iconColor.withOpacity(0.2)
-                      : iconColor.withOpacity(0.1),
+                      ? iconColor.withValues(alpha: 0.2)
+                      : iconColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
                   icon,
-                  color: isGranted ? iconColor : iconColor.withOpacity(0.8),
+                  color: isGranted ? iconColor : iconColor.withValues(alpha: 0.8),
                   size: 24,
                 ),
               ),
@@ -452,7 +452,7 @@ class _PermissionsScreenState extends State<PermissionsScreen>
                 borderRadius: BorderRadius.circular(16),
               ),
               elevation: 2,
-              shadowColor: AppColors.primary.withOpacity(0.3),
+              shadowColor: AppColors.primary.withValues(alpha: 0.3),
             ),
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,

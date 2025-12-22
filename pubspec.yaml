@@ -49,6 +49,15 @@ dependencies:
   lottie: ^3.1.2
   device_info_plus: ^12.3.0
   image_picker: ^1.1.2
+  # Story 3.2 - Photo Capture and Upload
+  camera: ^0.11.0+2
+  image: ^4.5.2
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  connectivity_plus: ^6.1.4
+  path_provider: ^2.1.5
+  geolocator: ^13.0.2
+  path: ^1.9.1
 
 dev_dependencies:
   flutter_test:

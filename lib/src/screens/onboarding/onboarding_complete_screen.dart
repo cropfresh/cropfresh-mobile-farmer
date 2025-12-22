@@ -224,7 +224,7 @@ class _OnboardingCompleteScreenState extends State<OnboardingCompleteScreen>
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: AppColors.secondary.withOpacity(0.3),
+                      color: AppColors.secondary.withValues(alpha: 0.3),
                       width: 3,
                     ),
                   ),
@@ -241,7 +241,7 @@ class _OnboardingCompleteScreenState extends State<OnboardingCompleteScreen>
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.secondary.withOpacity(0.4),
+                        color: AppColors.secondary.withValues(alpha: 0.4),
                         blurRadius: 24,
                         offset: const Offset(0, 8),
                       ),
@@ -303,7 +303,7 @@ class _OnboardingCompleteScreenState extends State<OnboardingCompleteScreen>
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -344,7 +344,7 @@ class _OnboardingCompleteScreenState extends State<OnboardingCompleteScreen>
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: iconColor.withOpacity(0.12),
+            color: iconColor.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Center(
@@ -386,7 +386,7 @@ class _OnboardingCompleteScreenState extends State<OnboardingCompleteScreen>
                 borderRadius: BorderRadius.circular(16),
               ),
               elevation: 2,
-              shadowColor: AppColors.secondary.withOpacity(0.3),
+              shadowColor: AppColors.secondary.withValues(alpha: 0.3),
             ),
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -514,7 +514,7 @@ class _ConfettiPainter extends CustomPainter {
 
       final opacity = (1 - adjustedProgress).clamp(0.0, 1.0);
       final paint = Paint()
-        ..color = confetti.color.withOpacity(opacity * 0.8);
+        ..color = confetti.color.withValues(alpha: opacity * 0.8);
 
       canvas.save();
       canvas.translate(x, y);

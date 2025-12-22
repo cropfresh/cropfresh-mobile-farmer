@@ -379,7 +379,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -391,7 +391,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
       border: Border.all(color: AppColors.primary, width: 2),
       boxShadow: [
         BoxShadow(
-          color: AppColors.primary.withOpacity(0.15),
+          color: AppColors.primary.withValues(alpha: 0.15),
           blurRadius: 12,
           offset: const Offset(0, 4),
         ),
@@ -523,7 +523,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen>
             borderRadius: BorderRadius.circular(16),
           ),
           elevation: 2,
-          shadowColor: AppColors.secondary.withOpacity(0.3),
+          shadowColor: AppColors.secondary.withValues(alpha: 0.3),
         ),
         child: _isVerifying
             ? const SizedBox(

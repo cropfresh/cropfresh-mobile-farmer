@@ -191,7 +191,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withOpacity(0.3),
+                color: AppColors.primary.withValues(alpha: 0.3),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
               ),
@@ -238,7 +238,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
         boxShadow: _phoneFocusNode.hasFocus
             ? [
                 BoxShadow(
-                  color: AppColors.primary.withOpacity(0.1),
+                  color: AppColors.primary.withValues(alpha: 0.1),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -392,7 +392,7 @@ class _RegistrationScreenState extends State<RegistrationScreen>
             borderRadius: BorderRadius.circular(16),
           ),
           elevation: _isValid ? 2 : 0,
-          shadowColor: AppColors.primary.withOpacity(0.3),
+          shadowColor: AppColors.primary.withValues(alpha: 0.3),
         ),
         child: _isLoading
             ? const SizedBox(

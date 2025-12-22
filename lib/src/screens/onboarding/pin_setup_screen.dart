@@ -74,7 +74,7 @@ class _PinSetupScreenState extends State<PinSetupScreen>
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                color: AppColors.primary.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -142,7 +142,10 @@ class _PinSetupScreenState extends State<PinSetupScreen>
             const Spacer(),
             
             // Numeric Keypad
-            _buildNumericKeypad(),
+            if (_isLoading)
+              const CircularProgressIndicator()
+            else
+              _buildNumericKeypad(),
             
             const SizedBox(height: 24),
           ],
@@ -228,7 +231,7 @@ class _PinSetupScreenState extends State<PinSetupScreen>
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
