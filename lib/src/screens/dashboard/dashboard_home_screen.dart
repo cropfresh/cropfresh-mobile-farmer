@@ -135,53 +135,67 @@ class _EarningsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppColors.secondary, AppColors.primary],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, '/earnings'),
+      borderRadius: BorderRadius.circular(AppSpacing.cardBorderRadius),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [AppColors.secondary, AppColors.primary],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(AppSpacing.cardBorderRadius),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.secondary.withValues(alpha: 0.3),
+              blurRadius: 12,
+              offset: const Offset(0, 6),
+            ),
+          ],
         ),
-        borderRadius: BorderRadius.circular(AppSpacing.cardBorderRadius),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.secondary.withValues(alpha: 0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Total Earnings',
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.9),
-              fontSize: 14,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  'Total Earnings',
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.9),
+                    fontSize: 14,
+                  ),
+                ),
+                const Spacer(),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 14,
+                  color: Colors.white.withValues(alpha: 0.7),
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: AppSpacing.xxs),
-          Text(
-            '₹ 0',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 32,
-              fontWeight: FontWeight.w700,
+            const SizedBox(height: AppSpacing.xxs),
+            Text(
+              '₹ 0',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 32,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          // Quick stats row
-          Row(
-            children: [
-              _MiniStat(icon: Icons.check_circle, label: '0 Sold'),
-              const SizedBox(width: AppSpacing.lg),
-              _MiniStat(icon: Icons.pending_actions, label: '0 Pending'),
-            ],
-          ),
-        ],
+            const SizedBox(height: AppSpacing.sm),
+            // Quick stats row
+            Row(
+              children: [
+                _MiniStat(icon: Icons.check_circle, label: '0 Sold'),
+                const SizedBox(width: AppSpacing.lg),
+                _MiniStat(icon: Icons.pending_actions, label: '0 Pending'),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -272,10 +286,13 @@ class _QuickActionsSection extends StatelessWidget {
             const SizedBox(width: AppSpacing.md),
             Expanded(
               child: _ActionCard(
-                icon: Icons.help_outline,
-                label: 'Help',
-                subtitle: 'Call support',
-                onTap: () {},
+                icon: Icons.local_shipping_outlined,
+                label: 'My Orders',
+                subtitle: 'Track status',
+                onTap: () {
+                  // Navigate to orders screen (Story 3.6)
+                  Navigator.pushNamed(context, '/orders');
+                },
               ),
             ),
           ],

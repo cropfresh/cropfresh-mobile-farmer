@@ -41,6 +41,13 @@ import 'src/screens/match/match_success_screen.dart';
 import 'src/widgets/pending_matches_widget.dart';
 import 'src/models/match_models.dart';
 
+// Order Screens (Story 3.6)
+import 'src/screens/orders/my_orders_screen.dart';
+import 'src/models/order_models.dart';
+
+// Transaction Screens (Story 3.7)
+import 'src/screens/transaction_screens.dart';
+
 // Services (Story 3.2)
 import 'src/services/photo_upload_service.dart';
 
@@ -269,6 +276,37 @@ class CropFreshFarmerApp extends StatelessWidget {
             onViewOrder: () => Navigator.of(context).pushReplacementNamed('/home'),
             onBackToDashboard: () => Navigator.of(context).pushReplacementNamed('/home'),
           ),
+        );
+      
+      // Story 3.6 - Order Status Tracking
+      case '/orders':
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const MyOrdersScreen(),
+        );
+      case '/order-details':
+        final order = settings.arguments as Order? ?? Order.mock();
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => OrderDetailsScreen(order: order),
+        );
+      
+      // Story 3.7 - Farmer Transaction History & Payment View
+      case '/earnings':
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const EarningsDashboardScreen(),
+        );
+      case '/transactions':
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const TransactionListScreen(),
+        );
+      case '/transaction-details':
+        final transactionId = settings.arguments as String? ?? '';
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => TransactionDetailScreen(transactionId: transactionId),
         );
       
       // Legacy routes (for backward compatibility)
