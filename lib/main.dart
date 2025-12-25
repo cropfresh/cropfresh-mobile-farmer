@@ -48,6 +48,10 @@ import 'src/models/order_models.dart';
 // Transaction Screens (Story 3.7)
 import 'src/screens/transaction_screens.dart';
 
+// Notification Screens (Story 3.8)
+import 'src/screens/notifications/notification_center_screen.dart';
+import 'src/screens/settings/notification_preferences_screen.dart';
+
 // Services (Story 3.2)
 import 'src/services/photo_upload_service.dart';
 
@@ -307,6 +311,18 @@ class CropFreshFarmerApp extends StatelessWidget {
         return MaterialPageRoute(
           settings: settings,
           builder: (_) => TransactionDetailScreen(transactionId: transactionId),
+        );
+      
+      // Story 3.8 - Farmer Notifications
+      case '/notifications':
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const NotificationCenterScreen(),
+        );
+      case '/notification-preferences':
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const NotificationPreferencesScreen(),
         );
       
       // Legacy routes (for backward compatibility)

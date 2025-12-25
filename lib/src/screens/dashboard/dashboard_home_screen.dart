@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_spacing.dart';
+import '../../widgets/notification_widgets.dart';
 
 /// DashboardHomeScreen - Main farmer dashboard home tab
 /// 
@@ -41,6 +42,12 @@ class DashboardHomeScreen extends StatelessWidget {
               ],
             ),
             actions: [
+              // Notification bell with badge - Story 3.8
+              NotificationBellBadge(
+                unreadCount: 5, // TODO: Get from provider/state
+                onTap: () => Navigator.pushNamed(context, '/notifications'),
+                animate: true,
+              ),
               // Profile avatar
               Padding(
                 padding: const EdgeInsets.only(right: AppSpacing.md),
