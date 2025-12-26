@@ -52,6 +52,10 @@ import 'src/screens/transaction_screens.dart';
 import 'src/screens/notifications/notification_center_screen.dart';
 import 'src/screens/settings/notification_preferences_screen.dart';
 
+// Active Listings Screens (Story 3.9)
+import 'src/screens/listings/active_listings_screen.dart';
+import 'src/screens/listings/edit_listing_screen.dart';
+
 // Services (Story 3.2)
 import 'src/services/photo_upload_service.dart';
 
@@ -323,6 +327,26 @@ class CropFreshFarmerApp extends StatelessWidget {
         return MaterialPageRoute(
           settings: settings,
           builder: (_) => const NotificationPreferencesScreen(),
+        );
+      
+      // Story 3.9 - Update or Cancel Active Listings
+      case '/active-listings':
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const ActiveListingsScreen(),
+        );
+      case '/edit-listing':
+        final listing = settings.arguments as CropListing?;
+        if (listing == null) {
+          return MaterialPageRoute(
+            builder: (_) => const Scaffold(
+              body: Center(child: Text('Error: No listing provided')),
+            ),
+          );
+        }
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => EditListingScreen(listing: listing),
         );
       
       // Legacy routes (for backward compatibility)
