@@ -6,6 +6,7 @@ import 'dashboard_home_screen.dart';
 import 'listings_screen.dart';
 import 'markets_screen.dart';
 import 'profile_screen.dart';
+import '../education/educational_content_screen.dart'; // Story 3.11
 
 /// DashboardShell - Main navigation container with Center FAB
 /// 
@@ -32,6 +33,7 @@ class _DashboardShellState extends State<DashboardShell>
   final List<Widget> _screens = const [
     DashboardHomeScreen(),
     ListingsScreen(),
+    EducationalContentScreen(farmerId: 1), // Story 3.11 - Learn tab
     MarketsScreen(),
     ProfileScreen(),
   ];
@@ -138,11 +140,11 @@ class _DashboardShellState extends State<DashboardShell>
             ),
             // Center spacer for FAB
             const SizedBox(width: 72),
-            // Markets
+            // Learn (Story 3.11 - Educational Content)
             _NavItem(
-              icon: Icons.storefront_outlined,
-              selectedIcon: Icons.storefront,
-              label: 'Markets',
+              icon: Icons.lightbulb_outline,
+              selectedIcon: Icons.lightbulb,
+              label: 'Learn',
               isSelected: _selectedIndex == 2,
               onTap: () => setState(() => _selectedIndex = 2),
             ),
@@ -151,8 +153,8 @@ class _DashboardShellState extends State<DashboardShell>
               icon: Icons.person_outline,
               selectedIcon: Icons.person,
               label: 'Profile',
-              isSelected: _selectedIndex == 3,
-              onTap: () => setState(() => _selectedIndex = 3),
+              isSelected: _selectedIndex == 4,
+              onTap: () => setState(() => _selectedIndex = 4),
             ),
           ],
         ),

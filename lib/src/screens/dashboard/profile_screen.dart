@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_spacing.dart';
+import '../ratings/ratings_summary_screen.dart';
 
 /// ProfileScreen - Farmer profile and settings tab
 /// 
@@ -107,6 +108,18 @@ class ProfileScreen extends StatelessWidget {
                 icon: Icons.edit_outlined,
                 label: 'Edit Profile',
                 onTap: () {},
+              ),
+              _ProfileMenuItem(
+                icon: Icons.star_outline,
+                label: 'My Ratings',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const RatingsSummaryScreen(),
+                    ),
+                  );
+                },
               ),
               _ProfileMenuItem(
                 icon: Icons.agriculture_outlined,

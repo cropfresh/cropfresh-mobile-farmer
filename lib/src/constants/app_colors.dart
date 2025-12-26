@@ -60,6 +60,12 @@ class AppColors {
   static const Color grey = Colors.grey;
   
   // ============================================
+  // SEMANTIC COLORS (Story 3.10 Ratings)
+  // ============================================
+  static const Color starFilled = Color(0xFFFFC107);  // Amber for filled stars
+  static const Color accent = Color(0xFFE91E63);       // Pink accent for badges
+  
+  // ============================================
   // GRADIENTS (Premium feel)
   // ============================================
   static const LinearGradient primaryGradient = LinearGradient(
