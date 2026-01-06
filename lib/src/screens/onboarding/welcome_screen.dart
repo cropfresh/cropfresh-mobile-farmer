@@ -112,41 +112,56 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     return Scaffold(
       backgroundColor: AppColors.surface,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 32),
-              
-              // Animated Header
-              SlideTransition(
-                position: _headerSlide,
-                child: FadeTransition(
-                  opacity: _headerFade,
-                  child: _buildHeader(),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(height: 24),
+                        
+                        // Animated Header
+                        SlideTransition(
+                          position: _headerSlide,
+                          child: FadeTransition(
+                            opacity: _headerFade,
+                            child: _buildHeader(),
+                          ),
+                        ),
+                        
+                        const SizedBox(height: 32),
+                        
+                        // Animated Benefits
+                        _buildBenefitsList(),
+                        
+                        const Spacer(),
+                        
+                        const SizedBox(height: 24),
+                        
+                        // Animated Buttons Section
+                        SlideTransition(
+                          position: _buttonSlide,
+                          child: FadeTransition(
+                            opacity: _buttonFade,
+                            child: _buildButtonsSection(),
+                          ),
+                        ),
+                        
+                        const SizedBox(height: 16),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-              
-              const SizedBox(height: 40),
-              
-              // Animated Benefits
-              _buildBenefitsList(),
-              
-              const Spacer(),
-              
-              // Animated Buttons Section
-              SlideTransition(
-                position: _buttonSlide,
-                child: FadeTransition(
-                  opacity: _buttonFade,
-                  child: _buildButtonsSection(),
-                ),
-              ),
-              
-              const SizedBox(height: 24),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

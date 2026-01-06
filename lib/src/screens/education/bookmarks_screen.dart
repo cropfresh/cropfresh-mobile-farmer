@@ -1,15 +1,14 @@
-/// Bookmarks Screen - Story 3.11
-/// 
-/// Screen for viewing bookmarked and recently viewed content.
-/// AC7: Content Bookmarking & History
-/// AC9: Offline Support (download indicators)
+// Bookmarks Screen - Story 3.11
+//
+// Screen for viewing bookmarked and recently viewed content.
+// AC7: Content Bookmarking & History
+// AC9: Offline Support (download indicators)
 
 import 'package:flutter/material.dart';
 import '../../models/education_models.dart';
 import '../../services/education_service.dart';
 import '../education/article_detail_screen.dart';
 import '../education/video_player_screen.dart';
-import '../../widgets/education_widgets.dart';
 
 class BookmarksScreen extends StatefulWidget {
   final int farmerId;

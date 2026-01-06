@@ -1,10 +1,11 @@
-/// Rating Models - Story 3.10
-///
-/// Data models for farmer quality ratings and feedback.
-/// Follows transaction_models.dart pattern.
-///
-/// Includes: RatingSummary, RatingListItem, RatingDetails,
-/// QualityIssue, Recommendation, StarBreakdown, TrendItem
+// Rating Models - Story 3.10
+//
+// Data models for farmer quality ratings and feedback.
+// Follows transaction_models.dart pattern.
+//
+// Includes: RatingSummary, RatingListItem, RatingDetails,
+// QualityIssue, Recommendation, StarBreakdown, TrendItem
+
 
 import 'package:intl/intl.dart';
 

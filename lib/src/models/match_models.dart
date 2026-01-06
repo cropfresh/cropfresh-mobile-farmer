@@ -305,8 +305,8 @@ class Match {
 
   /// TTS announcement text for voice confirmation
   String get ttsAnnouncement {
-    return 'A buyer wants your ${listing.cropType} for ${formattedTotal}. '
-           'Quantity: ${formattedQuantity}. '
+    return 'A buyer wants your ${listing.cropType} for $formattedTotal. '
+           'Quantity: $formattedQuantity. '
            'Accept or reject?';
   }
 

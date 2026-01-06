@@ -1,12 +1,11 @@
-/// Educational Content Screen - Story 3.11
-/// 
-/// Main screen for browsing educational content.
-/// AC1: Access Educational Content Section
-/// AC2: Content Library Display
-/// AC6: Personalized Recommendations
+// Educational Content Screen - Story 3.11
+//
+// Main screen for browsing educational content.
+// AC1: Access Educational Content Section
+// AC2: Content Library Display
+// AC6: Personalized Recommendations
 
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import '../../models/education_models.dart';
 import '../../services/education_service.dart';
 import '../education/article_detail_screen.dart';

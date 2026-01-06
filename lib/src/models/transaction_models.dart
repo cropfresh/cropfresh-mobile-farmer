@@ -1,7 +1,7 @@
-/// Transaction Models - Story 3.7
-///
-/// Models for farmer transaction history, earnings, and receipts.
-/// Follows Material Design 3 principles with Voice-First support.
+// Transaction Models - Story 3.7
+//
+// Models for farmer transaction history, earnings, and receipts.
+// Follows Material Design 3 principles with Voice-First support.
 
 import 'package:intl/intl.dart';
 
@@ -137,12 +137,12 @@ class EarningsSummary {
   /// TTS announcement for voice-first UX (AC6)
   String get ttsAnnouncement {
     final parts = <String>[];
-    parts.add('Your total earnings are ${formattedTotal}.');
+    parts.add('Your total earnings are $formattedTotal.');
     if (thisMonth > 0) {
-      parts.add('This month you earned ${formattedThisMonth}.');
+      parts.add('This month you earned $formattedThisMonth.');
     }
     if (pending > 0) {
-      parts.add('You have ${formattedPending} pending.');
+      parts.add('You have $formattedPending pending.');
     }
     if (newSinceLastVisit > 0) {
       parts.add('$newSinceLastVisit new transactions since your last visit.');
@@ -360,13 +360,13 @@ class PaymentBreakdown {
   String get ttsAnnouncement {
     final parts = <String>[
       'Payment breakdown.',
-      'Base amount ${formattedBaseAmount}.',
+      'Base amount $formattedBaseAmount.',
     ];
     if (qualityBonus != 0) {
-      parts.add('Quality bonus ${formattedQualityBonus}.');
+      parts.add('Quality bonus $formattedQualityBonus.');
     }
     parts.add('Platform fee is zero.');
-    parts.add('Net amount received ${formattedNetAmount}.');
+    parts.add('Net amount received $formattedNetAmount.');
     if (formattedPaidAt != null) {
       parts.add('Paid on $formattedPaidAt.');
     }

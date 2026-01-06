@@ -1,8 +1,6 @@
-/// Education Models - Story 3.11
-/// 
-/// Data models for educational content, following patterns from rating_models.dart.
-
-import 'dart:convert';
+// Education Models - Story 3.11
+//
+// Data models for educational content, following patterns from rating_models.dart.
 
 /// Content type enum
 enum ContentType { video, article, infographic }
